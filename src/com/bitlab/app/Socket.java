@@ -1,6 +1,9 @@
 package com.bitlab.app;
 
+import com.bitlab.dao.DaoUser;
+import com.bitlab.entity.User;
 import com.bitlab.utility.Encryption;
+import com.bitlab.utility.Email;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -55,11 +58,12 @@ public class Socket {
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 //-
                 //Setting max wait time
-                clientSocket.setSoTimeout(20000);
+                clientSocket.setSoTimeout(400000);
                 //-
                 //LOGIN PROCESS
                 //
-                loginProcess(in,out);
+                loginProcess(in, out);
+                
                 //Setting Email
                 //String email = in.readLine();
                 //- 
@@ -107,26 +111,73 @@ public class Socket {
     
     //- GG
     public static void loginProcess(BufferedReader in, PrintWriter out){
-        String user = "";
-        String pass = "";
+        String user = "",pass = "";
+        DaoUser dao = new DaoUser();
+        Email email = new Email();
         boolean log = true;
-        try {
-            while(log){
+        int id = 0, rol = 0;
+        User us;
+        while (log) {
+            try {
                 out.println("Digite su usuario: ");
                 user = in.readLine();
                 out.println("Digite su contraseña: ");
                 pass = in.readLine();
                 System.out.println("usuario: " + user + ", password: " + pass);
-                if(user.equals("a")){
+                us = new User(user, pass);
+                id = dao.iniciar(us);
+                if (id != 0) {
                     out.println("logSuccessful");
                     log = false;
-                }else{
+                } else {
                     out.println("logIncorrect");
                 }
+            } catch (IOException ex) {
+                System.out.println("ERROR1: " + ex.getMessage());
+                log = false;
             }
-        } catch (IOException ex) {
-            Logger.getLogger(Socket.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+        //-Vars to email Verification
+        log = true;
+        String correo = "";
+
+        while (log) {
+            try {
+                correo = in.readLine();
+                rol = dao.emailVerification(correo, id);
+                System.out.println(rol);
+                if (rol != 0) {
+                    out.println("vSuccessful");
+                    log = false;
+                } else {
+                    out.println("wrongEmail");
+                }
+            } catch (IOException ex) {
+                System.out.println("ERROR1: " + ex.getMessage());
+                log = false;
+            }
+        }
+
+        //-Vars to code verification
+        log = true;
+        int code = 0, rsCode = 0;
+        code = email.sendMail(correo);
+        System.out.println("correo enviado a: " + correo);
+        while (log) {
+            try {
+                rsCode = Integer.parseInt(in.readLine());
+                if (code == rsCode) {
+                    out.println(rol);
+                    log = false;
+                } else {
+                    out.println("Código incorrecto.");
+                }
+            } catch (IOException ex) {
+                System.out.println("ERROR1: " + ex.getMessage());
+                log = false;
+            }
+
+        }
     }
 }

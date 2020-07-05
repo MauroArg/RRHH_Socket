@@ -6,39 +6,77 @@ package com.bitlab.entity;
  * fecha: 2020-07-03
  */
 public class User {
-    String username;
-    String password;
-    byte rol_id;
+    private int us_id;
+    private String us_usuario;
+    private String us_contra;
+    private String us_correo;
+    Rol rol;
 
     public User() {
+        
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public User(int us_id, String us_usuario, String us_contra, String us_correo, Rol rol) {
+        this.us_id = us_id;
+        this.us_usuario = us_usuario;
+        this.us_contra = us_contra;
+        this.us_correo = us_correo;
+        this.rol = rol;
     }
 
-    public String getUsername() {
-        return username;
+    public Rol getRol() {
+        return rol;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+  
+    public User(String us_usuario, String us_contra) {
+        this.us_usuario = us_usuario;
+        this.us_contra = us_contra;
     }
 
-    public String getPassword() {
-        return password;
+    public User(Rol rol) {
+        this.rol = rol;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public User(int us_id, Rol rol) {
+        this.us_id = us_id;
+        this.rol = rol;
+    }
+    
+    
+    
+    public int getUs_id() {
+        return us_id;
     }
 
-    public byte getRol_id() {
-        return rol_id;
+    public void setUs_id(int us_id) {
+        this.us_id = us_id;
+    }
+    
+    public String getUs_usuario() {
+        return us_usuario;
     }
 
-    public void setRol_id(byte rol_id) {
-        this.rol_id = rol_id;
+    public void setUs_usuario(String us_usuario) {
+        this.us_usuario = us_usuario;
+    }
+
+    public String getUs_contra() {
+        return us_contra;
+    }
+
+    public void setUs_contra(String us_contra) {
+        this.us_contra = us_contra;
+    }
+
+    public String getUs_correo() {
+        return us_correo;
+    }
+
+    public void setUs_correo(String us_correo) {
+        this.us_correo = us_correo;
     }
 }
