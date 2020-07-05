@@ -7,7 +7,7 @@ import org.json.simple.JSONArray;
  * fecha: 2020-07-02
  */
 public class Employe {
-    private byte emp_id;
+    private int emp_id;
     private String emp_codigo;
     private String emp_nombres;
     private String emp_apellidos;
@@ -19,19 +19,36 @@ public class Employe {
     private String emp_direccion;
     private byte emp_estado;
     private Departament departamento;
-    private byte emp_jef_id;
+    private int emp_jef_id;
 
     public Employe() {
         
     }
 
-    public byte getEmp_id() {
+    public Employe(int emp_id, String emp_codigo, String emp_nombres, String emp_apellidos, String emp_dui, String emp_nit, String emp_correo, String emp_telefono, double emp_sueldo, String emp_direccion, byte emp_estado, Departament departamento, int emp_jef_id) {
+        this.emp_id = emp_id;
+        this.emp_codigo = emp_codigo;
+        this.emp_nombres = emp_nombres;
+        this.emp_apellidos = emp_apellidos;
+        this.emp_dui = emp_dui;
+        this.emp_nit = emp_nit;
+        this.emp_correo = emp_correo;
+        this.emp_telefono = emp_telefono;
+        this.emp_sueldo = emp_sueldo;
+        this.emp_direccion = emp_direccion;
+        this.emp_estado = emp_estado;
+        this.departamento = departamento;
+        this.emp_jef_id = emp_jef_id;
+    }
+    
+    public int getEmp_id() {
         return emp_id;
     }
 
-    public void setEmp_id(byte emp_id) {
+    public void setEmp_id(int emp_id) {
         this.emp_id = emp_id;
     }
+
 
     public String getEmp_codigo() {
         return emp_codigo;
@@ -121,12 +138,11 @@ public class Employe {
         this.departamento = departamento;
     }
 
-    public byte getEmp_jef_id() {
+    public int getEmp_jef_id() {
         return emp_jef_id;
     }
 
-    public void setEmp_jef_id(byte emp_jef_id) {
+    public void setEmp_jef_id(int emp_jef_id) {
         this.emp_jef_id = emp_jef_id;
     }
-    
 }

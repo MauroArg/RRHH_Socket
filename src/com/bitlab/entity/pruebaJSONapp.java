@@ -4,10 +4,12 @@
  * and open the template in the editor.
  */
 package com.bitlab.entity;
+import com.bitlab.app.AppProcess;
 import com.bitlab.dao.Conexion;
 import com.bitlab.dao.DaoDepartament;
 import com.bitlab.dao.DaoUser;
 import com.bitlab.utility.Encryption;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +35,43 @@ public class pruebaJSONapp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Encryption enc = new Encryption();
+        
+        DaoDepartament dao = new DaoDepartament();
+        JSONParser parser = new JSONParser();
+        JSONObject responseData = new JSONObject();
+        ArrayList<Departament> list = new ArrayList();
+        Departament dep = new Departament();
+        String response = "{\"departaments\":[{\"id\":1,\"nombre\":\"Informatica\"},{\"id\":2,\"nombre\":\"RRHH\"},{\"id\":3,\"nombre\":\"Ventas\"}]}";
+        try {
+            //- Update action
+            JSONObject obj = (JSONObject) parser.parse(response);
+            JSONArray depArray = (JSONArray) obj.get("departaments");
+            for(Object item:depArray){
+                JSONObject depObj = (JSONObject)item;
+                dep = new Departament();
+                dep.setDep_id(Integer.parseInt(depObj.get("id").toString()));
+                dep.setDep_nombre(depObj.get("nombre").toString());
+                //System.out.println(dep.getDep_nombre());
+                list.add(dep);
+            }
+            
+            System.out.println(list.get(0).getDep_nombre());
+            /*JSONObject depObj = (JSONObject)depArray.get(2);
+            dep.setDep_id(Integer.parseInt(depObj.get("id").toString()));
+            dep.setDep_nombre(depObj.get("nombre").toString());
+            System.out.println(dep.getDep_nombre());*/
+            
+        }  catch (ParseException ex) {
+            Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        /*Encryption enc = new Encryption();
         System.out.println(enc.decrypt("BxV/e/4IwIerSxs/Hm6PFgSgGNyL8hm7myA30MCYEE0="));
         System.out.println(enc.decrypt("EEOzJdKrAdoaoXshuDfoMw=="));
-        
-        DaoUser dao = new DaoUser();
+        */
+        /*DaoUser dao = new DaoUser();
         User us = new User();
         us = new User("admin","2njkIyJSFeR2lqO/jv0gNw==");
         int res = dao.iniciar(us);
@@ -45,9 +79,9 @@ public class pruebaJSONapp {
         ArrayList<User> list = new ArrayList();
         ArrayList<User> userListJSON = new ArrayList();
         JSONObject responseDetailsJson = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArray = new JSONArray();*/
         
-        try {
+        /*try {
             list = dao.getAll();
             for(User user:list){
                 JSONObject formDetailsJson = new JSONObject();
@@ -84,7 +118,7 @@ public class pruebaJSONapp {
             Logger.getLogger(pruebaJSONapp.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(pruebaJSONapp.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         
            
        /* JSONObject responseDetailsJson = new JSONObject();

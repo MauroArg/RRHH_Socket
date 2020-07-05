@@ -33,6 +33,7 @@ public class Socket {
     //WebSocket Configurations
     public static void initSocket(){
         try {
+            AppProcess app = new AppProcess();
             //- Validation var
             boolean vFlag = true;
             
@@ -61,8 +62,8 @@ public class Socket {
                 clientSocket.setSoTimeout(400000);
                 //-
                 //LOGIN PROCESS
-                //
-                loginProcess(in, out);
+                app.gestEmploye(in, out);
+                //loginProcess(in, out);
                 
                 //Setting Email
                 //String email = in.readLine();
@@ -74,8 +75,8 @@ public class Socket {
                     try{
                        if((inputLine = in.readLine()) != null){
                             switch(inputLine){
-                                case "1":
-
+                                case "gestDepartament":
+                                    app.gestDepartament(in, out);
                                     break;
                                 case "2":
 
@@ -180,4 +181,8 @@ public class Socket {
 
         }
     }
+    
+    //- GG
+    //- App functions
+    
 }
