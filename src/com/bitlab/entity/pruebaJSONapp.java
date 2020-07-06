@@ -36,7 +36,17 @@ public class pruebaJSONapp {
      */
     public static void main(String[] args) {
         
-        DaoDepartament dao = new DaoDepartament();
+        JSONObject data = new JSONObject();
+        JSONObject dep = new JSONObject();
+        dep.put("id", "1");
+        dep.put("nombre", "IT");
+        data.put("departament", dep);
+        System.out.println(data.toJSONString());
+        
+        
+        
+        
+        /*DaoDepartament dao = new DaoDepartament();
         JSONParser parser = new JSONParser();
         JSONObject responseData = new JSONObject();
         ArrayList<Departament> list = new ArrayList();
@@ -59,11 +69,11 @@ public class pruebaJSONapp {
             /*JSONObject depObj = (JSONObject)depArray.get(2);
             dep.setDep_id(Integer.parseInt(depObj.get("id").toString()));
             dep.setDep_nombre(depObj.get("nombre").toString());
-            System.out.println(dep.getDep_nombre());*/
+            System.out.println(dep.getDep_nombre());
             
         }  catch (ParseException ex) {
             Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         
         
         

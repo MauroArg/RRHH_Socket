@@ -15,6 +15,11 @@ import java.sql.ResultSet;
  * @author gusst
  */
 public class DaoPayroll {
+    private static final double minSueldo = 338.6666666666667;
+    private static final double medSueldo = 761.905;
+    private static final double topSueldo = 1904.761666666667;
+    
+    
     PreparedStatement ps;
     ResultSet rs;
     Payroll py;

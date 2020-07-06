@@ -102,7 +102,7 @@ public class DaoUser extends Conexion{
                 resp=this.rol;
             }
         }
-        catch(Exception e)
+        catch(ClassNotFoundException | SQLException e)
         {
             resp=0;
         }
@@ -110,9 +110,7 @@ public class DaoUser extends Conexion{
         {
             try {
                 con().close();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
+            } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(DaoUser.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -147,7 +145,7 @@ public class DaoUser extends Conexion{
         for(User us:ar){
             JSONObject formDetailsJson = new JSONObject();
             formDetailsJson.put("id", us.getUs_id());
-            formDetailsJson.put("usuario", us.getUs_usuario());
+            formDetailsJson.put("username", us.getUs_usuario());
             formDetailsJson.put("correo", us.getUs_correo());
             formDetailsJson.put("rol_id", us.getRol().getRol_id());
             formDetailsJson.put("rol_nombre", us.getRol().getRol_nombre());
@@ -171,13 +169,11 @@ public class DaoUser extends Conexion{
             res=ps.executeUpdate();
             if(res>0){response="exitoso";}else{response="ha ocurrido un error.";}
         } 
-        catch (Exception e) 
+        catch (ClassNotFoundException | SQLException e) 
         {
             response = "ERROR: "+e.getMessage();
         }  
-        JSONObject jsonData = new JSONObject();
-        jsonData.put("msg", response);
-        return jsonData.toJSONString();
+        return response;
     }
     
     public String update(User us){
@@ -199,9 +195,7 @@ public class DaoUser extends Conexion{
         {
             response = "ERROR: "+e.getMessage();
         }  
-        JSONObject jsonData = new JSONObject();
-        jsonData.put("msg", response);
-        return jsonData.toJSONString();
+        return response;
     }
     
     public String delete(User us){
@@ -216,13 +210,11 @@ public class DaoUser extends Conexion{
                 res=ps.executeUpdate();
                 if(res>0){response="exitoso";}else{response="ha ocurrido un error.";}
             } 
-            catch (Exception e) 
+            catch (ClassNotFoundException | SQLException e) 
             {
                 response = "ERROR: "+e.getMessage();
             }  
         }
-        JSONObject jsonData = new JSONObject();
-        jsonData.put("msg", response);
-        return jsonData.toJSONString();
+        return response;
     }
 }

@@ -47,19 +47,27 @@ public class AppProcess{
                     JSONObject depObj = (JSONObject)obj.get("departament");
                     dep.setDep_id(Integer.parseInt(depObj.get("id").toString()));
                     dep.setDep_nombre(depObj.get("nombre").toString());
-                    dao.update(dep);
+                    response = dao.update(dep);
+                    //- print response to client
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
                     break;
                 case "create":
                     //- Create action
                     response = in.readLine();
                     dep.setDep_nombre(response);
-                    dao.add(dep);
+                    response = dao.add(dep);
+                    //- print response to client
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
+                    break;
+                case "list":
                     break;
                 default:
                     break;
             }
-            
-            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -68,7 +76,7 @@ public class AppProcess{
             Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
             Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
     
     public void gestUser(BufferedReader in, PrintWriter out){
@@ -82,6 +90,7 @@ public class AppProcess{
         try {
             //- Pass data to client
             out.println(dao.getData());
+            System.out.println(dao.getData());
             //- Wait for the action order
             response = in.readLine();
             //-Switch to do an action
@@ -101,12 +110,14 @@ public class AppProcess{
                     us.setUs_correo(usObj.get("username").toString());
                     us.setUs_contra(usObj.get("password").toString());
                     us.setUs_correo(usObj.get("correo").toString());
-                    rol.setRol_id(Integer.parseInt(usObj.get("id_rol").toString()));
+                    rol.setRol_id(Integer.parseInt(usObj.get("rol_id").toString()));
                     us.setRol(rol);
                     //- Update and get of response
                     response = dao.update(us);
                     //- print response to client
-                    out.print(response);
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
                     break;
                 case "create":
                     //- Create action
@@ -122,12 +133,14 @@ public class AppProcess{
                     us.setUs_correo(usObj.get("username").toString());
                     us.setUs_contra(usObj.get("password").toString());
                     us.setUs_correo(usObj.get("correo").toString());
-                    rol.setRol_id(Integer.parseInt(usObj.get("id_rol").toString()));
+                    rol.setRol_id(Integer.parseInt(usObj.get("rol_id").toString()));
                     us.setRol(rol);
                     //- Create and get of response
                     response = dao.add(us);
                     //- print response to client
-                    out.print(response);
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
                     break;
                 case "delete":
                     //- delete
@@ -138,7 +151,11 @@ public class AppProcess{
                     us.setUs_id(Integer.parseInt(response));
                     response = dao.delete(us);
                     //- print response to client
-                    out.print(response);
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
+                    break;
+                case "list":
                     break;
                 default:
                     break;
@@ -181,6 +198,7 @@ public class AppProcess{
                     dep = new Departament();
                     //- Parsing json and setting data to objects
                     emp.setEmp_id(Integer.parseInt(empObj.get("id").toString()));
+                    emp.setEmp_codigo(empObj.get("codigo").toString());
                     emp.setEmp_nombres(empObj.get("nombres").toString());
                     emp.setEmp_apellidos(empObj.get("apellidos").toString());
                     emp.setEmp_dui(empObj.get("dui").toString());
@@ -190,13 +208,15 @@ public class AppProcess{
                     emp.setEmp_sueldo(Double.parseDouble(empObj.get("sueldo").toString()));
                     emp.setEmp_direccion(empObj.get("direccion").toString());
                     emp.setEmp_estado(Byte.parseByte(empObj.get("estado").toString()));
-                    dep.setDep_id(Integer.parseInt(empObj.get("id_dep").toString()));
+                    dep.setDep_id(Integer.parseInt(empObj.get("dep_id").toString()));
                     emp.setDepartamento(dep);
-                    emp.setEmp_jef_id(Integer.parseInt(empObj.get("id_jefe").toString()));
+                    emp.setEmp_jef_id(Integer.parseInt(empObj.get("jefe_id").toString()));
                     //- Update and get of response
                     response = dao.update(emp);
                     //- print response to client
-                    out.print(response);
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
                     break;
                 case "create":
                     //- Update action
@@ -209,6 +229,7 @@ public class AppProcess{
                     emp = new Employe();
                     dep = new Departament();
                     //- Parsing json and setting data to objects
+                    emp.setEmp_codigo(empObj.get("codigo").toString());
                     emp.setEmp_nombres(empObj.get("nombres").toString());
                     emp.setEmp_apellidos(empObj.get("apellidos").toString());
                     emp.setEmp_dui(empObj.get("dui").toString());
@@ -218,13 +239,29 @@ public class AppProcess{
                     emp.setEmp_sueldo(Double.parseDouble(empObj.get("sueldo").toString()));
                     emp.setEmp_direccion(empObj.get("direccion").toString());
                     emp.setEmp_estado(Byte.parseByte(empObj.get("estado").toString()));
-                    dep.setDep_id(Integer.parseInt(empObj.get("id_dep").toString()));
+                    dep.setDep_id(Integer.parseInt(empObj.get("dep_id").toString()));
                     emp.setDepartamento(dep);
-                    emp.setEmp_jef_id(Integer.parseInt(empObj.get("id_jefe").toString()));
+                    emp.setEmp_jef_id(Integer.parseInt(empObj.get("jefe_id").toString()));
                     //- Update and get of response
                     response = dao.update(emp);
                     //- print response to client
-                    out.print(response);
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
+                    break;
+                case "disable":
+                    //- Update action
+                    //- GET JSON 
+                    response = in.readLine();
+                    //-Initilize objects
+                    emp = new Employe();
+                    emp.setEmp_id(Integer.parseInt(response));
+                    //- Update and get of response
+                    response = dao.disable(emp);
+                    //- print response to client
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
                     break;
                 default:
                     break;
@@ -238,5 +275,107 @@ public class AppProcess{
         } catch (ParseException ex) {
             Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void gestRol(BufferedReader in, PrintWriter out){
+        DaoRol dao = new DaoRol();
+        JSONParser parser = new JSONParser();
+        JSONObject responseData = new JSONObject();
+        Rol rol = new Rol();
+        String response = "";
+        try {
+            //- Pass data to client
+            out.println(dao.getData());
+            //- Wait for the action order
+            response = in.readLine();
+            //-Switch to do an action
+            switch(response){
+                case "update":
+                    //- Update action
+                    response = in.readLine();
+                    JSONObject obj = (JSONObject) parser.parse(response);
+                    JSONObject depObj = (JSONObject)obj.get("rol");
+                    rol.setRol_id(Integer.parseInt(depObj.get("id").toString()));
+                    rol.setRol_nombre(depObj.get("nombre").toString());
+                    response = dao.update(rol);
+                    //- print response to client
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
+                    break;
+                case "create":
+                    //- Create action
+                    response = in.readLine();
+                    rol.setRol_nombre(response);
+                    response = dao.add(rol);
+                    //- print response to client
+                    out.println(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
+                    break;
+                default:
+                    break;
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }
+    
+    public void gestPayroll(BufferedReader in, PrintWriter out){
+        DaoRol dao = new DaoRol();
+        JSONParser parser = new JSONParser();
+        JSONObject responseData = new JSONObject();
+        Rol rol = new Rol();
+        String response = "";
+        try {
+            //- Pass data to client
+            out.println(dao.getData());
+            //- Wait for the action order
+            response = in.readLine();
+            //-Switch to do an action
+            switch(response){
+                case "update":
+                    //- Update action
+                    response = in.readLine();
+                    JSONObject obj = (JSONObject) parser.parse(response);
+                    JSONObject depObj = (JSONObject)obj.get("rol");
+                    rol.setRol_id(Integer.parseInt(depObj.get("id").toString()));
+                    rol.setRol_nombre(depObj.get("nombre").toString());
+                    response = dao.update(rol);
+                    //- print response to client
+                    out.print(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
+                    break;
+                case "create":
+                    //- Create action
+                    response = in.readLine();
+                    rol.setRol_nombre(response);
+                    response = dao.add(rol);
+                    //- print response to client
+                    out.print(response);
+                    //- Pass data to client
+                    out.println(dao.getData());
+                    break;
+                case "list":
+                    break;
+                default:
+                    break;
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(AppProcess.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }
 }

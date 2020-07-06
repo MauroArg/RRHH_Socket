@@ -2,15 +2,12 @@ package com.bitlab.app;
 
 import com.bitlab.dao.DaoUser;
 import com.bitlab.entity.User;
-import com.bitlab.utility.Encryption;
 import com.bitlab.utility.Email;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Gustavo Gómez
@@ -33,6 +30,7 @@ public class Socket {
     //WebSocket Configurations
     public static void initSocket(){
         try {
+            //- App Functions Process
             AppProcess app = new AppProcess();
             //- Validation var
             boolean vFlag = true;
@@ -62,7 +60,7 @@ public class Socket {
                 clientSocket.setSoTimeout(400000);
                 //-
                 //LOGIN PROCESS
-                app.gestEmploye(in, out);
+                //app.gestDepartament(in, out);
                 //loginProcess(in, out);
                 
                 //Setting Email
@@ -76,24 +74,41 @@ public class Socket {
                        if((inputLine = in.readLine()) != null){
                             switch(inputLine){
                                 case "gestDepartament":
+                                    System.out.println("Entrando a gestion de departamentos.");
                                     app.gestDepartament(in, out);
                                     break;
-                                case "2":
-
-                                case "3":
-
+                                case "gestUser":
+                                    System.out.println("entrando a gestion de usuarios.");
+                                    app.gestUser(in, out);
+                                    break;
+                                case "gestEmploye":
+                                    System.out.println("entrando a gestion de empleados.");
+                                    app.gestEmploye(in, out);
+                                    break;
+                                case "gestRol":
+                                    System.out.println("entrando a gestion de roles.");
+                                    app.gestRol(in, out);
+                                    break;
+                                case "gestPayroll":
+                                    System.out.println("entrando a gestion de planilla.");
+                                    app.gestPayroll(in, out);
+                                    break;
+                                case "systemExit":
+                                    System.out.println("saliendo del sistema.");
+                                    app.gestPayroll(in, out);
                                     activeFlag = false;
                                     break;
                                 default:
+                                    System.out.println("unrecognized command.");
                                     out.println("unrecognized command.");
+                                    break;
                             }
                         }
                         Thread.sleep(1000); 
                     }catch (IOException ex) {
                         System.out.println("ERROR1: " + ex.getMessage());
-                       activeFlag = false;
+                        activeFlag = false;
                     }
-                    
                 }
                 //-
                 //Close of all objects
@@ -112,16 +127,21 @@ public class Socket {
     
     //- GG
     public static void loginProcess(BufferedReader in, PrintWriter out){
+        //- Validation vars
         String user = "",pass = "";
         DaoUser dao = new DaoUser();
         Email email = new Email();
         boolean log = true;
         int id = 0, rol = 0;
         User us;
+        //- Validation conventional log
         while (log) {
             try {
+                //- Petitions to LoginProcess
+                //- username pt
                 out.println("Digite su usuario: ");
                 user = in.readLine();
+                //- password pt
                 out.println("Digite su contraseña: ");
                 pass = in.readLine();
                 System.out.println("usuario: " + user + ", password: " + pass);
@@ -142,7 +162,7 @@ public class Socket {
         //-Vars to email Verification
         log = true;
         String correo = "";
-
+        //- Validating emailExists
         while (log) {
             try {
                 correo = in.readLine();
@@ -165,6 +185,7 @@ public class Socket {
         int code = 0, rsCode = 0;
         code = email.sendMail(correo);
         System.out.println("correo enviado a: " + correo);
+        //- Validating verification code
         while (log) {
             try {
                 rsCode = Integer.parseInt(in.readLine());
@@ -181,8 +202,5 @@ public class Socket {
 
         }
     }
-    
-    //- GG
-    //- App functions
     
 }
