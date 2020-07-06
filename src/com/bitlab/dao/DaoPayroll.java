@@ -11,8 +11,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
- *
- * @author gusst
+ * @author Gustavo Gómez
+ * class: DaoPayroll
+ * fecha: 2020-07-02
  */
 public class DaoPayroll {
     private static final double minSueldo = 338.6666666666667;
