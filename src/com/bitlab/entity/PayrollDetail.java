@@ -17,25 +17,13 @@ public class PayrollDetail
     private double   det_pln_renta;
     private double   det_pln_isss;
     private double   det_pln_afp;
-    private byte     det_pln_cantidad_horas_extra;
+    private byte     det_pln_cantidad_horas_diurnas;
+    private byte     det_pln_cantidad_horas_nocturnas;
     private double   det_pln_bono_horas_extra;
     private Payroll  payroll;
     private Employe  employe;
 
     public PayrollDetail() {
-    }
-
-    public PayrollDetail(int det_pln_id, double det_pln_total, double det_pln_total_descuentos, double det_pln_renta, double det_pln_isss, double det_pln_afp, byte det_pln_cantidad_horas_extra, double det_pln_bono_horas_extra, Payroll payroll, Employe employe) {
-        this.det_pln_id = det_pln_id;
-        this.det_pln_total = det_pln_total;
-        this.det_pln_total_descuentos = det_pln_total_descuentos;
-        this.det_pln_renta = det_pln_renta;
-        this.det_pln_isss = det_pln_isss;
-        this.det_pln_afp = det_pln_afp;
-        this.det_pln_cantidad_horas_extra = det_pln_cantidad_horas_extra;
-        this.det_pln_bono_horas_extra = det_pln_bono_horas_extra;
-        this.payroll = payroll;
-        this.employe = employe;
     }
 
     public int getDet_pln_id() {
@@ -86,14 +74,6 @@ public class PayrollDetail
         this.det_pln_afp = det_pln_afp;
     }
 
-    public byte getDet_pln_cantidad_horas_extra() {
-        return det_pln_cantidad_horas_extra;
-    }
-
-    public void setDet_pln_cantidad_horas_extra(byte det_pln_cantidad_horas_extra) {
-        this.det_pln_cantidad_horas_extra = det_pln_cantidad_horas_extra;
-    }
-
     public double getDet_pln_bono_horas_extra() {
         return det_pln_bono_horas_extra;
     }
@@ -102,6 +82,24 @@ public class PayrollDetail
         this.det_pln_bono_horas_extra = det_pln_bono_horas_extra;
     }
 
+    public byte getDet_pln_cantidad_horas_diurnas() {
+        return det_pln_cantidad_horas_diurnas;
+    }
+
+    public void setDet_pln_cantidad_horas_diurnas(byte det_pln_cantidad_horas_diurnas) {
+        this.det_pln_cantidad_horas_diurnas = det_pln_cantidad_horas_diurnas;
+    }
+
+    public byte getDet_pln_cantidad_horas_nocturnas() {
+        return det_pln_cantidad_horas_nocturnas;
+    }
+
+    public void setDet_pln_cantidad_horas_nocturnas(byte det_pln_cantidad_horas_nocturnas) {
+        this.det_pln_cantidad_horas_nocturnas = det_pln_cantidad_horas_nocturnas;
+    }
+
+    
+    
     public Payroll getPayroll() {
         return payroll;
     }

@@ -13,12 +13,12 @@ public class Payroll
 {
     private int    pln_id;
     private String pln_fecha;
-    private String pln_total;
+        private double pln_total;
 
     public Payroll() {
     }
 
-    public Payroll(int pln_id, String pln_fecha, String pln_total) {
+    public Payroll(int pln_id, String pln_fecha, double pln_total) {
         this.pln_id = pln_id;
         this.pln_fecha = pln_fecha;
         this.pln_total = pln_total;
@@ -40,11 +40,11 @@ public class Payroll
         this.pln_fecha = pln_fecha;
     }
 
-    public String getPln_total() {
+    public double getPln_total() {
         return pln_total;
     }
 
-    public void setPln_total(String pln_total) {
+    public void setPln_total(double pln_total) {
         this.pln_total = pln_total;
     }
     

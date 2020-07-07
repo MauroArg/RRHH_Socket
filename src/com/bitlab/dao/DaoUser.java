@@ -146,6 +146,7 @@ public class DaoUser extends Conexion{
             JSONObject formDetailsJson = new JSONObject();
             formDetailsJson.put("id", us.getUs_id());
             formDetailsJson.put("username", us.getUs_usuario());
+            formDetailsJson.put("password", us.getUs_contra());
             formDetailsJson.put("correo", us.getUs_correo());
             formDetailsJson.put("rol_id", us.getRol().getRol_id());
             formDetailsJson.put("rol_nombre", us.getRol().getRol_nombre());
@@ -181,7 +182,7 @@ public class DaoUser extends Conexion{
         String response = "";
         try 
         {
-            String sql = "UPDATE rh_usuario SET US_USUARIO=?,US_CONRA=?,US_CORREO=?,ROL_ID=? WHERE US_ID=?;";
+            String sql = "UPDATE rh_usuario SET US_USUARIO=?,US_CONTRA=?,US_CORREO=?,ROL_ID=? WHERE US_ID=?;";
             ps = super.con().prepareStatement(sql);
             ps.setString(1, us.getUs_usuario());
             ps.setString(2,us.getUs_contra());
@@ -204,7 +205,7 @@ public class DaoUser extends Conexion{
         if(us.getUs_id()==1){response="No se pueden eliminar usuarios de tipo Administrador";}else{
             try 
             {
-                String sql = "DELETE WHERE US_ID=?;";
+                String sql = "DELETE FROM rh_usuario WHERE US_ID=?;";
                 ps = super.con().prepareStatement(sql);
                 ps.setInt(1, us.getUs_id());
                 res=ps.executeUpdate();

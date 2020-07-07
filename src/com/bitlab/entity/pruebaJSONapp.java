@@ -7,6 +7,7 @@ package com.bitlab.entity;
 import com.bitlab.app.AppProcess;
 import com.bitlab.dao.Conexion;
 import com.bitlab.dao.DaoDepartament;
+import com.bitlab.dao.DaoRol;
 import com.bitlab.dao.DaoUser;
 import com.bitlab.utility.Encryption;
 import java.io.IOException;
@@ -35,16 +36,17 @@ public class pruebaJSONapp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        JSONObject data = new JSONObject();
+        DaoRol dao = new DaoRol();
+        /*JSONObject data = new JSONObject();
         JSONObject dep = new JSONObject();
         dep.put("id", "1");
         dep.put("nombre", "IT");
         data.put("departament", dep);
-        System.out.println(data.toJSONString());
+        System.out.println(data.toJSONString());*/
         
-        
-        
+        Rol rol = new Rol();
+        rol.setRol_nombre("prueba");
+        System.out.println(dao.add(rol));
         
         /*DaoDepartament dao = new DaoDepartament();
         JSONParser parser = new JSONParser();
