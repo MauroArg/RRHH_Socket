@@ -9,10 +9,13 @@ import com.bitlab.entity.Departament;
 import com.bitlab.entity.Employe;
 import com.bitlab.entity.Payroll;
 import com.bitlab.entity.PayrollDetail;
+import com.bitlab.entity.pruebaJSONapp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -98,54 +101,28 @@ public class DaoPayroll extends Conexion{
             formDetailsJson.put("fecha",py.getPln_fecha());
             formDetailsJson.put("total",py.getPln_total());
             formDetailsJson.put("esatdo",py.getPln_estado());
+            jsonArray.add(formDetailsJson);
         }
         jsonData.put("payrolls", jsonArray);
         return jsonData.toJSONString();
     }
     
     //- add function
-    public String add(ArrayList<PayrollDetail> data, double total) throws ClassNotFoundException, SQLException{
+    public String add(double total) throws ClassNotFoundException, SQLException{
         String response = "";
         int res = 0;
-        String sql = "INSERT INTO rh_planilla(PLN_FECHA,PLN_TOTAL) VALUES(CURRENT_DATE(),?);";
-        StringBuilder insert = new StringBuilder();
+        int pln = 0;
+        String sql = "INSERT INTO rh_planilla(PLN_FECHA,PLN_TOTAL,PLN_ESTADO) VALUES(CURRENT_DATE(),?,0);";
         ps = super.con().prepareStatement(sql);
         ps.setDouble(1, total);
         try 
         {
             res=ps.executeUpdate();
-            if(res>0){
-                insert.append("INSERT INTO rh_detalle_planilla(DET_PLN_TOTAL,DET_PLN_DESCUENTOS,");
-                insert.append("DET_PLN_RENTA,DET_PLN_ISSS,DET_PLN_AFP,DET_PLN_CANTIDAD_HORAS_DIRUNAS,");
-                insert.append("DET_PLN_BONO_HORAS_EXTRA,DET_PLN_CANTIDAD_HORAS_NOCTURNAS,PLN_ID,EMP_ID) VALUES");
-                int i = 1;
-                for(PayrollDetail pyd:data){
-                    insert.append("(").append(pyd.getDet_pln_total()).append(",");
-                    insert.append(pyd.getDet_pln_total_descuentos()).append(",");
-                    insert.append(pyd.getDet_pln_renta()).append(",");
-                    insert.append(pyd.getDet_pln_isss()).append(",");
-                    insert.append(pyd.getDet_pln_afp()).append(",");
-                    insert.append(pyd.getDet_pln_cantidad_horas_diurnas()).append(",");
-                    insert.append(pyd.getDet_pln_bono_horas_extra()).append(",");
-                    insert.append(pyd.getDet_pln_cantidad_horas_nocturnas()).append(",");
-                    insert.append("last_inserted_id,");
-                    insert.append(pyd.getEmploye().getEmp_id()).append(")");
-                    
-                    if(i<data.size()){
-                        insert.append(",");
-                    }else{
-                        insert.append(";");
-                    }
-                    i++;
-                }
-                ps = super.con().prepareStatement(insert.toString());
-                res=ps.executeUpdate();
-                if(res>0){response="exitoso";}else{response="ha ocurrido un error.";}
-            }else{response="ha ocurrido un error.";}
+            if(res>0){response="ok";}else{response="ha ocurrido un error.";}
         } 
         catch (Exception e) 
         {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR DE SQL: " + e.getMessage());
         }
         finally
         {
@@ -227,14 +204,15 @@ public class DaoPayroll extends Conexion{
         return jsonData.toJSONString();
     }
     
-    public String getPayrollDetailById(Payroll pay) throws ClassNotFoundException, SQLException{
+    public String getPayrollDetailById(int id) throws ClassNotFoundException, SQLException{
         ArrayList<Payroll> ar = new ArrayList();
         ArrayList<PayrollDetail> arDetail = new ArrayList();
-        String sql = "SELECT * FROM rh_detalle_planilla WHERE DET_PLN_ID=?;";
-        ps = super.con().prepareStatement(sql);
-        ps.setInt(1, pay.getPln_id());
+        String sql = "SELECT * FROM rh_detalle_planilla WHERE PLN_ID=?;";
         try 
         {
+            ps = super.con().prepareStatement(sql);
+            ps.setInt(1, id);
+            System.out.println("CONSULTA" + ps.toString());
             rs = ps.executeQuery();
             while(rs.next()){
                 pd = new PayrollDetail();
@@ -256,7 +234,7 @@ public class DaoPayroll extends Conexion{
         } 
         catch (Exception e) 
         {
-            System.out.println(e.getMessage());
+            System.out.println("ERROR DE SQL: " + e.getMessage());
         }
         finally
         {
@@ -282,9 +260,9 @@ public class DaoPayroll extends Conexion{
             jsonArray.add(formDetailsJson);
             i++;
         }
-        jsonData.put("total",ar.get(0).getPln_total());
+        /*jsonData.put("total",ar.get(0).getPln_total());
         jsonData.put("fecha",ar.get(0).getPln_fecha());
-        jsonData.put("estado",ar.get(0).getPln_estado());
+        jsonData.put("estado",ar.get(0).getPln_estado());*/
         jsonData.put("detail", jsonArray);
         return jsonData.toJSONString();
     }
@@ -305,6 +283,81 @@ public class DaoPayroll extends Conexion{
         {
             response = "ERROR: "+e.getMessage();
         }  
+        return response;
+    }
+    
+    public int getPLNID() throws SQLException, ClassNotFoundException{
+        int id = 0;
+        String sql = "";
+        sql = "SELECT MAX(PLN_ID) AS id FROM rh_planilla;";
+        
+        try 
+        {
+            ps = super.con().prepareStatement(sql);
+            rs = ps.executeQuery();
+            int i = 0;
+            while(rs.next()){
+                if(i==0){id=rs.getInt(1);}
+                i++;
+            } 
+        } 
+        catch (Exception e) 
+        {
+            System.out.println(e.getMessage());
+        }
+        finally
+        {
+            super.con().close();
+        }
+        return id;
+    }
+    
+    public String insertdDetail(ArrayList<PayrollDetail> data, int pln ) throws ClassNotFoundException, SQLException{
+        String response = "";
+        StringBuilder insert = new StringBuilder();
+        int res = 0;
+        try 
+        {
+            insert.append("INSERT INTO rh_detalle_planilla(DET_PLN_TOTAL,DET_PLN_TOTAL_DESCUENTOS,");
+            insert.append("DET_PLN_RENTA,DET_PLN_ISSS,DET_PLN_AFP,DET_PLN_CANTIDAD_HORAS_DIURNAS,");
+            insert.append("DET_PLN_BONO_HORAS_EXTRA,DET_PLN_CANTIDAD_HORAS_NOCTURNAS,PLN_ID,EMP_ID) VALUES");
+            int i = 1;
+            for (PayrollDetail pyd : data) {
+                insert.append("(").append((double)Math.round(pyd.getDet_pln_total() * 100d) / 100d).append(",");
+                insert.append((double)Math.round(pyd.getDet_pln_total_descuentos() * 100d) / 100d).append(",");
+                insert.append((double)Math.round(pyd.getDet_pln_renta() * 100d) / 100d).append(",");
+                insert.append((double)Math.round(pyd.getDet_pln_isss() * 100d) / 100d).append(",");
+                insert.append((double)Math.round(pyd.getDet_pln_afp() * 100d) / 100d).append(",");
+                insert.append(pyd.getDet_pln_cantidad_horas_diurnas()).append(",");
+                insert.append((double)Math.round(pyd.getDet_pln_bono_horas_extra() * 100d) / 100d).append(",");
+                insert.append(pyd.getDet_pln_cantidad_horas_nocturnas()).append(",");
+                insert.append(pln).append(",");
+                insert.append(pyd.getEmploye().getEmp_id()).append(")");
+
+                if (i < data.size()) {
+                    insert.append(",");
+                } else {
+                    insert.append(";");
+                }
+                i++;
+            }
+            System.out.println(insert.toString());
+            ps = super.con().prepareStatement(insert.toString());
+            res = ps.executeUpdate();
+            if (res > 0) {
+                response = "exitoso";
+            } else {
+                response = "ha ocurrido un error.";
+            }
+        } 
+        catch (Exception e) 
+        {
+            System.out.println("ERROR DE SQL: " + e.getMessage());
+        }
+        finally
+        {
+            super.con().close();
+        }
         return response;
     }
 }

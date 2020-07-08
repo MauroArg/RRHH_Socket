@@ -346,6 +346,7 @@ public class AppProcess{
     
     public void gestPayroll(BufferedReader in, PrintWriter out){
         DaoPayroll dao = new DaoPayroll();
+        DaoEmploye daoE = new DaoEmploye();
         JSONParser parser = new JSONParser();
         PayrollDetail pd;//Payroll Object to add in arrayList
         Employe emp;
@@ -355,7 +356,8 @@ public class AppProcess{
         try {
             //- Pass data to client
             out.println(dao.getAll());
-            
+            out.println(daoE.getData());
+            System.out.println(dao.getAll());
             //- Wait for the action order
             response = in.readLine();
             //-Switch to do an action
@@ -372,8 +374,10 @@ public class AppProcess{
                         Double payrollTotal = 0.0;
                         ArrayList<PayrollDetail> data = new ArrayList();
                         //- Getting responseData
+                        
                         response = in.readLine();
                         //-Parsing to jsonObject
+                        System.out.println(response);
                         JSONObject obj = (JSONObject) parser.parse(response);
                         payrollTotal = Double.parseDouble(obj.get("total").toString());
                         JSONArray payrollDetail = (JSONArray) obj.get("detail");
@@ -397,30 +401,40 @@ public class AppProcess{
                             pd.setPayroll(py);
                             data.add(pd);
                         }
+                        
                         //- getting the add response
-                        response = dao.add(data,payrollTotal);
+                        response = dao.add(payrollTotal);
+                        int pln = dao.getPLNID();
+                        System.out.println(pln);
+                        response = dao.insertdDetail(data, pln);
                         //- print response to client
                         out.println(response);
+                        System.out.println(response);
                     }else if(response.equals("showActualPayroll")){
                         //- getting the add response
                         response = dao.getActual();
                         //- print response to client
+                        
                         out.println(response);
+                        //-
                     }
                     break;
                 case "getPayrollDetail":
                     //- Waiting for the client response
                     response = in.readLine();
                     //- Response evaluation
-                    if(response.contentEquals("getPayroll")){
+                    System.out.println("DEL RESPONSE: " + response);
+                    if(response.equals("getPayroll")){
                         //- Waiting for the payrollID
                         response = in.readLine();
                         //- Initializing object
-                        py = new Payroll();
-                        py.setPln_id(Integer.parseInt(response));
+                        System.out.println("DEL ID: " + response);
+                        
                         //- Print response to client
-                        response = dao.getPayrollDetailById(py);
+                        response = dao.getPayrollDetailById(Integer.parseInt(response));
+                        System.out.println(response);
                         out.println(response);
+                        
                     }
                     break;
                 case "payPayroll":

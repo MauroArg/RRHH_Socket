@@ -60,7 +60,6 @@ public class Socket {
                 clientSocket.setSoTimeout(400000);
                 //-
                 //LOGIN PROCESS
-                //app.gestDepartament(in, out);
                 //loginProcess(in, out);
                 
                 //Setting Email
