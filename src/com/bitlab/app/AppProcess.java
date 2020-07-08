@@ -191,6 +191,7 @@ public class AppProcess{
         try {
             //- Pass data to client
             out.println(dao.getData());
+            System.out.println("DATA FINAL-->: " + dao.getData());
             out.println(daoD.getData());
             //- Wait for the action order
             response = in.readLine();
@@ -201,6 +202,7 @@ public class AppProcess{
                     //- Update action
                     //- GET JSON 
                     response = in.readLine();
+                    System.out.println(response);
                     obj = (JSONObject) parser.parse(response);
                     //- GET KEY user
                     empObj = (JSONObject)obj.get("employe");
@@ -232,6 +234,7 @@ public class AppProcess{
                     //- Update action
                     //- GET JSON 
                     response = in.readLine();
+                    System.out.println(response);
                     obj = (JSONObject) parser.parse(response);
                     //- GET KEY user
                     empObj = (JSONObject)obj.get("employe");
@@ -253,9 +256,10 @@ public class AppProcess{
                     emp.setDepartamento(dep);
                     emp.setEmp_jef_id(Integer.parseInt(empObj.get("jefe_id").toString()));
                     //- Update and get of response
-                    response = dao.update(emp);
+                    response = dao.add(emp);
                     //- print response to client
                     out.println(response);
+                    System.out.println("FUNCTION RESPONSE---->" + response);
                     break;
                 case "disable":
                     System.out.println("DISABLE EMPLOYE FUNCTION IS ACTIVE");
@@ -350,7 +354,7 @@ public class AppProcess{
         String response = "";
         try {
             //- Pass data to client
-            //out.println(dao.getAll());
+            out.println(dao.getAll());
             
             //- Wait for the action order
             response = in.readLine();
@@ -404,16 +408,33 @@ public class AppProcess{
                         out.println(response);
                     }
                     break;
-                case "showPayrolls":
-                    //- return of the payrollJSON
-                    out.println(dao.getAll());
-                    //- waiting for the client response to do an action
+                case "getPayrollDetail":
+                    //- Waiting for the client response
                     response = in.readLine();
-                    if(response.equals("getPayrollById")){
+                    //- Response evaluation
+                    if(response.contentEquals("getPayroll")){
+                        //- Waiting for the payrollID
                         response = in.readLine();
+                        //- Initializing object
                         py = new Payroll();
                         py.setPln_id(Integer.parseInt(response));
+                        //- Print response to client
                         response = dao.getPayrollDetailById(py);
+                        out.println(response);
+                    }
+                    break;
+                case "payPayroll":
+                    //- Waiting for the client response
+                    response = in.readLine();
+                    //- Response evaluation
+                    if(response.contentEquals("pay")){
+                        //- Waiting for the payrollID
+                        response = in.readLine();
+                        //- Initializing object
+                        py = new Payroll();
+                        py.setPln_id(Integer.parseInt(response));
+                        //- Print response to client
+                        response = dao.payPayroll(py);
                         out.println(response);
                     }
                     break;

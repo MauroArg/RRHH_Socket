@@ -13,17 +13,22 @@ public class Payroll
 {
     private int    pln_id;
     private String pln_fecha;
-        private double pln_total;
+    private double pln_total;
+    private byte pln_estado;    
 
     public Payroll() {
     }
 
-    public Payroll(int pln_id, String pln_fecha, double pln_total) {
+    public Payroll(int pln_id, String pln_fecha, double pln_total, byte pln_estado) {
         this.pln_id = pln_id;
         this.pln_fecha = pln_fecha;
         this.pln_total = pln_total;
+        this.pln_estado = pln_estado;
     }
 
+    
+
+    
     public int getPln_id() {
         return pln_id;
     }
@@ -47,6 +52,13 @@ public class Payroll
     public void setPln_total(double pln_total) {
         this.pln_total = pln_total;
     }
-    
-    
+
+    public byte getPln_estado() {
+        return pln_estado;
+    }
+
+    public void setPln_estado(byte pln_estado) {
+        this.pln_estado = pln_estado;
+    }
+
 }

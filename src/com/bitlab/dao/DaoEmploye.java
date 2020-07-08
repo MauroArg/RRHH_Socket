@@ -25,23 +25,42 @@ public class DaoEmploye extends Conexion{
     public String getData() throws ClassNotFoundException, SQLException{
         ArrayList<Employe> ar = new ArrayList<>();
         ArrayList<String> jef_nombres = new ArrayList<>();
-        String sql = "SELECT emp.*,e.EMP_NOMBRES as EMP_JEFE FROM rh_empleado emp INNER JOIN rh_empleado e ON emp.EMP_JEF_ID=e.EMP_NOMBRES;";
+        //String sql = "SELECT emp.*,e.EMP_NOMBRES as EMP_JEFE FROM rh_empleado emp INNER JOIN rh_empleado e ON emp.EMP_JEF_ID=e.EMP_ID;";
+        String sql = "SELECT emp.*,e.EMP_NOMBRES,dep.DEP_NOMBRE FROM rh_empleado emp INNER JOIN rh_empleado e ON emp.EMP_JEF_ID=e.EMP_ID INNER JOIN rh_departamento dep ON dep.DEP_ID=emp.DEP_ID;";
         ps = super.con().prepareStatement(sql);
-        
         try 
         {
             rs = ps.executeQuery();
             while(rs.next()){
-                dep = new Departament(rs.getByte(12),rs.getString(15));
-                emp = new Employe(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
-                rs.getString(7),rs.getString(8),rs.getDouble(9),rs.getString(10),rs.getByte(11),dep,rs.getInt(13));
-                ar.add(emp);
+                dep = new Departament();
+                dep.setDep_id(rs.getInt(12));
+                dep.setDep_nombre(rs.getString(15));
                 jef_nombres.add(rs.getString(14));
+                
+                emp  = new Employe();
+                emp.setEmp_id(rs.getInt(1));
+                emp.setEmp_codigo(rs.getString(2));
+                emp.setEmp_nombres(rs.getString(3));
+                emp.setEmp_apellidos(rs.getString(4));
+                emp.setEmp_dui(rs.getString(5));
+                emp.setEmp_nit(rs.getString(6));
+                emp.setEmp_correo(rs.getString(7));
+                emp.setEmp_telefono(rs.getString(8));
+                emp.setEmp_sueldo(rs.getDouble(9));
+                emp.setEmp_direccion(rs.getString(10));
+                emp.setEmp_estado(rs.getByte(11));
+                emp.setEmp_jef_id(rs.getInt(13));
+                emp.setDepartamento(dep);
+                ar.add(emp);
+                jef_nombres.add("prueba");
             }
         } 
         catch (Exception e) 
         {
             System.out.println(e.getMessage());
+            emp = new Employe();
+            emp.setEmp_nombres(e.getMessage());
+            ar.add(emp);
         }
         finally
         {
@@ -78,12 +97,10 @@ public class DaoEmploye extends Conexion{
     
     public String add(Employe emp){
         int res = 0;
-        String response = "";
+        String response = "", psQuery = "No cambia";
         try 
         {
-            String sql = "INSERT INTO rh_empleado(EMP_CODIGO,EMP_NOMBRES,"
-            + "EMP_APELLIDOS,EMP_DUI,EMP_NIT,EMP_CORREO,EMP_TELEFONO,EMP_SUELDO,EMP_DIRECCION,"
-            + "EMP_ESTADO,DEP_ID,EMP_JEF_ID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);";
+            String sql = "INSERT INTO rh_empleado(EMP_CODIGO,EMP_NOMBRES,EMP_APELLIDOS,EMP_DUI,EMP_NIT,EMP_CORREO,EMP_TELEFONO,EMP_SUELDO,EMP_DIRECCION,EMP_ESTADO,DEP_ID,EMP_JEF_ID) VALUES(?,?,?,?,?,?,?,?,?,?,?,?);";
             ps = super.con().prepareStatement(sql);
             ps.setString(1, emp.getEmp_codigo());
             ps.setString(2, emp.getEmp_nombres());
@@ -94,11 +111,13 @@ public class DaoEmploye extends Conexion{
             ps.setString(7, emp.getEmp_telefono());
             ps.setDouble(8, emp.getEmp_sueldo());
             ps.setString(9, emp.getEmp_direccion());
-            ps.setByte(10, emp.getEmp_estado());
+            ps.setInt(10, emp.getEmp_estado());
             ps.setInt(11, emp.getDepartamento().getDep_id());
             ps.setInt(12, emp.getEmp_jef_id());
+            psQuery = ps.toString();
+            
             res=ps.executeUpdate();
-            if(res>0){response="exitoso";}else{response="ha ocurrido un error.";}
+            if(res>0){response="exitoso";}else{response="ha ocurrido un error." + psQuery;}
         } 
         catch (Exception e) 
         {

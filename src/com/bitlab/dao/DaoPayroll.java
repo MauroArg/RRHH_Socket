@@ -77,6 +77,7 @@ public class DaoPayroll extends Conexion{
                 py.setPln_id(rs.getInt(1));
                 py.setPln_fecha(rs.getString(2));
                 py.setPln_total(rs.getDouble(3));
+                py.setPln_estado(rs.getByte(4));
                 ar.add(py);
             }
         } 
@@ -96,8 +97,9 @@ public class DaoPayroll extends Conexion{
             formDetailsJson.put("id",py.getPln_id());
             formDetailsJson.put("fecha",py.getPln_fecha());
             formDetailsJson.put("total",py.getPln_total());
+            formDetailsJson.put("esatdo",py.getPln_estado());
         }
-        jsonData.put("payroll", jsonArray);
+        jsonData.put("payrolls", jsonArray);
         return jsonData.toJSONString();
     }
     
@@ -282,7 +284,27 @@ public class DaoPayroll extends Conexion{
         }
         jsonData.put("total",ar.get(0).getPln_total());
         jsonData.put("fecha",ar.get(0).getPln_fecha());
+        jsonData.put("estado",ar.get(0).getPln_estado());
         jsonData.put("detail", jsonArray);
         return jsonData.toJSONString();
+    }
+    
+    public String payPayroll(Payroll py){
+        String response = "";
+        int res = 0;
+        try 
+        {
+            String sql = "UPDATE rh_planilla SET PLN_ESTADO=1 WHERE PLN_ID=?;";
+            ps = super.con().prepareStatement(sql);
+            ps.setInt(1, py.getPln_id());
+            
+            res=ps.executeUpdate();
+            if(res>0){response="exitoso";}else{response="ha ocurrido un error.";}
+        } 
+        catch (Exception e) 
+        {
+            response = "ERROR: "+e.getMessage();
+        }  
+        return response;
     }
 }
