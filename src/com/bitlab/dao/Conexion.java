@@ -14,9 +14,9 @@ public class Conexion {
     private static final String PASSWORD = "EchoBitlab2020$$";
     private static final String DRIVER = "org.postgresql.Driver";*/
     //-
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/db_rrhhh";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String URL = "jdbc:mysql://35.208.154.100:3306/db_rrhh";
+    private static final String USER = "opUser";
+    private static final String PASSWORD = "bitlabP@ssword123";
     private static final String DRIVER = "com.mysql.jdbc.Driver";
     private static final Conexion main = new Conexion();
     private BasicDataSource basicDataSource;

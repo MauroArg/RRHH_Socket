@@ -61,7 +61,7 @@ public class Socket {
                 //-
                 //LOGIN PROCESS
                 boolean activeFlag = true;
-                //loginProcess(in, out, activeFlag);
+                loginProcess(in, out, activeFlag);
                 
                 //Setting Email
                 //String email = in.readLine();

@@ -377,7 +377,7 @@ public class AppProcess{
                         
                         response = in.readLine();
                         //-Parsing to jsonObject
-                        System.out.println(response);
+                        System.out.println("\n\nDATOS DEL DETALLE: "+response);
                         JSONObject obj = (JSONObject) parser.parse(response);
                         payrollTotal = Double.parseDouble(obj.get("total").toString());
                         JSONArray payrollDetail = (JSONArray) obj.get("detail");
@@ -448,6 +448,7 @@ public class AppProcess{
                         //- Print response to client
                         response = dao.payPayroll(py);
                         out.println(response);
+                        out.println(dao.getAll());
                     }
                     break;
                 default:
