@@ -357,7 +357,7 @@ public class AppProcess{
             //- Pass data to client
             out.println(dao.getAll());
             out.println(daoE.getData());
-            System.out.println(dao.getAll());
+            //System.out.println(dao.getAll());
             //- Wait for the action order
             response = in.readLine();
             //-Switch to do an action
@@ -429,12 +429,10 @@ public class AppProcess{
                         response = in.readLine();
                         //- Initializing object
                         System.out.println("DEL ID: " + response);
-                        
                         //- Print response to client
                         response = dao.getPayrollDetailById(Integer.parseInt(response));
                         System.out.println(response);
                         out.println(response);
-                        
                     }
                     break;
                 case "payPayroll":

@@ -60,17 +60,19 @@ public class Socket {
                 clientSocket.setSoTimeout(400000);
                 //-
                 //LOGIN PROCESS
-                //loginProcess(in, out);
+                boolean activeFlag = true;
+                //loginProcess(in, out, activeFlag);
                 
                 //Setting Email
                 //String email = in.readLine();
                 //- 
-                boolean activeFlag = true;
+                
                 while(activeFlag){
                     //Show menu to Client
                     //out.println("initMenu");
                     try{
                        if((inputLine = in.readLine()) != null){
+                           System.out.println(inputLine);
                             switch(inputLine){
                                 case "gestDepartament":
                                     System.out.println("Entrando a gestion de departamentos.");
@@ -125,7 +127,7 @@ public class Socket {
     }
     
     //- GG
-    public static void loginProcess(BufferedReader in, PrintWriter out){
+    public static void loginProcess(BufferedReader in, PrintWriter out, boolean app){
         //- Validation vars
         String user = "",pass = "";
         DaoUser dao = new DaoUser();

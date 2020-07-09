@@ -30,13 +30,16 @@ public class Email {
         try{
             int rNum = (int) Math.floor(Math.random()*(99999999-100000+1)+100000);
             StringBuilder content = new StringBuilder();
-            content.append("<center><h4>Este es tu código de verificación</h4>");
             content.append("<div style='padding:10px;background-color:black;");
             content.append("border-radius:5px;color:yellow;");
             content.append("font-size:19px;");
-            content.append("'>");
-            content.append(rNum);
+            content.append("background: lightblue url(\"https://www.thefinishingtouch.co.uk/wp-content/uploads/2019/09/coffee-and-laptop.jpg\") no-repeat fixed center;");
+            content.append("background-size:cover;padding:10px;'>");
+            content.append("<center><div style='background-color: rgba(17, 17, 17 , 0.8);border-radius:20px;'>");
+            content.append("<h4 style='color:white;padding:5px;'>Este es tu código de verificación</h4>");
+            content.append("<h4 style='color:white;padding:5px;'>").append(rNum).append("</h4>");
             content.append("</div></center>");
+            content.append("</div>");
             Encryption enc = new Encryption();
             String ed = enc.decrypt(MDATA[0]);
             String md = enc.decrypt(MDATA[1]);

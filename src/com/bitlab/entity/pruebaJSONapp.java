@@ -4,26 +4,8 @@
  * and open the template in the editor.
  */
 package com.bitlab.entity;
-import com.bitlab.app.AppProcess;
-import com.bitlab.dao.Conexion;
-import com.bitlab.dao.DaoDepartament;
-import com.bitlab.dao.DaoPayroll;
-import com.bitlab.dao.DaoRol;
-import com.bitlab.dao.DaoUser;
-import com.bitlab.utility.Encryption;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
+import com.bitlab.utility.Email;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import javax.mail.FetchProfile.Item;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -37,16 +19,8 @@ public class pruebaJSONapp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        DaoPayroll dao = new DaoPayroll();
-        try {
-            System.out.println(dao.getPLNID());
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(pruebaJSONapp.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(pruebaJSONapp.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+        Email email = new Email();
+        email.sendMail("gusstavoandred123@gmail.com");
         
         int diurnas = 0, nocturnas = 0;//- Cantidad de horas extras
         Double sueldo = 0.0;//-Sueldo neto = sueldoEmpleado + (bonoHorasDiurnas) + (BonoHorasNocturnas);
@@ -169,6 +143,7 @@ public class pruebaJSONapp {
                 //formDetailsJson.put("rol", user.getRol_id());
                 jsonArray.add(formDetailsJson);
             }
+        
             responseDetailsJson.put("users", jsonArray);
             System.out.println(responseDetailsJson);
             

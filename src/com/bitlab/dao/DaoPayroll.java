@@ -114,7 +114,7 @@ public class DaoPayroll extends Conexion{
         int pln = 0;
         String sql = "INSERT INTO rh_planilla(PLN_FECHA,PLN_TOTAL,PLN_ESTADO) VALUES(CURRENT_DATE(),?,0);";
         ps = super.con().prepareStatement(sql);
-        ps.setDouble(1, total);
+        ps.setDouble(1, (double)Math.round(total * 100d) / 100d);
         try 
         {
             res=ps.executeUpdate();
@@ -205,7 +205,6 @@ public class DaoPayroll extends Conexion{
     }
     
     public String getPayrollDetailById(int id) throws ClassNotFoundException, SQLException{
-        ArrayList<Payroll> ar = new ArrayList();
         ArrayList<PayrollDetail> arDetail = new ArrayList();
         String sql = "SELECT * FROM rh_detalle_planilla WHERE PLN_ID=?;";
         try 
@@ -215,6 +214,7 @@ public class DaoPayroll extends Conexion{
             System.out.println("CONSULTA" + ps.toString());
             rs = ps.executeQuery();
             while(rs.next()){
+                emp = new Employe();
                 pd = new PayrollDetail();
                 pd.setDet_pln_id(rs.getInt(1));
                 pd.setDet_pln_total(rs.getDouble(2));
@@ -225,14 +225,14 @@ public class DaoPayroll extends Conexion{
                 pd.setDet_pln_cantidad_horas_diurnas(rs.getByte(7));
                 pd.setDet_pln_cantidad_horas_nocturnas(rs.getByte(8));
                 pd.setDet_pln_bono_horas_extra(rs.getDouble(9));
-                emp.setEmp_id(rs.getInt(10));
+                emp.setEmp_id(rs.getInt(11));
                 pd.setEmploye(emp);
-                py.setPln_id(rs.getInt(11));
+                py.setPln_id(rs.getInt(10));
                 pd.setPayroll(py);
                 arDetail.add(pd);
             }
         } 
-        catch (Exception e) 
+        catch (SQLException e) 
         {
             System.out.println("ERROR DE SQL: " + e.getMessage());
         }
@@ -260,9 +260,6 @@ public class DaoPayroll extends Conexion{
             jsonArray.add(formDetailsJson);
             i++;
         }
-        /*jsonData.put("total",ar.get(0).getPln_total());
-        jsonData.put("fecha",ar.get(0).getPln_fecha());
-        jsonData.put("estado",ar.get(0).getPln_estado());*/
         jsonData.put("detail", jsonArray);
         return jsonData.toJSONString();
     }
